@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.mobileapp.pemdascalculator.WelcomeFragment"
+        android:label="Welcome">
+        <action
+            android:id="@+id/action_welcomeFragment_to_nextFragment"
+            app:destination="@id/nextFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nextFragment"
+        android:name="com.mobileapp.pemdascalculator.NextFragment"
+        android:label="Next" />
+</navigation>
