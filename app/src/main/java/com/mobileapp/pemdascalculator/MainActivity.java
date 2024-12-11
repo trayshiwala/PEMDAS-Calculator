@@ -26,22 +26,22 @@ public class MainActivity extends AppCompatActivity {
         inputExpression = new StringBuilder();
         calculationHistory = new ArrayList<>();
 
-        findViewById(R.id.button1).setOnClickListener(this::appendInput);
-        findViewById(R.id.button2).setOnClickListener(this::appendInput);
-        findViewById(R.id.button3).setOnClickListener(this::appendInput);
-        findViewById(R.id.button4).setOnClickListener(this::appendInput);
-        findViewById(R.id.button5).setOnClickListener(this::appendInput);
-        findViewById(R.id.button6).setOnClickListener(this::appendInput);
-        findViewById(R.id.button7).setOnClickListener(this::appendInput);
-        findViewById(R.id.button8).setOnClickListener(this::appendInput);
-        findViewById(R.id.button9).setOnClickListener(this::appendInput);
-        findViewById(R.id.button0).setOnClickListener(this::appendInput);
-        findViewById(R.id.buttonPlus).setOnClickListener(this::appendInput);
-        findViewById(R.id.buttonMinus).setOnClickListener(this::appendInput);
-        findViewById(R.id.buttonMultiply).setOnClickListener(this::appendInput);
-        findViewById(R.id.buttonDivide).setOnClickListener(this::appendInput);
-        findViewById(R.id.buttonEquals).setOnClickListener(view -> calculateResult());
-        findViewById(R.id.buttonClear).setOnClickListener(view -> clearInput());
+        findViewById(R.id.btn1).setOnClickListener(this::appendInput);
+        findViewById(R.id.btn2).setOnClickListener(this::appendInput);
+        findViewById(R.id.btn3).setOnClickListener(this::appendInput);
+        findViewById(R.id.btn4).setOnClickListener(this::appendInput);
+        findViewById(R.id.btn5).setOnClickListener(this::appendInput);
+        findViewById(R.id.btn6).setOnClickListener(this::appendInput);
+        findViewById(R.id.btn7).setOnClickListener(this::appendInput);
+        findViewById(R.id.btn8).setOnClickListener(this::appendInput);
+        findViewById(R.id.btn9).setOnClickListener(this::appendInput);
+        findViewById(R.id.btn0).setOnClickListener(this::appendInput);
+        findViewById(R.id.btnPlus).setOnClickListener(this::appendInput);
+        findViewById(R.id.btnMinus).setOnClickListener(this::appendInput);
+        findViewById(R.id.btnMultiply).setOnClickListener(this::appendInput);
+        findViewById(R.id.btnDivide).setOnClickListener(this::appendInput);
+        findViewById(R.id.btnEquals).setOnClickListener(view -> calculateResult());
+        findViewById(R.id.btnClear).setOnClickListener(view -> clearInput());
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
