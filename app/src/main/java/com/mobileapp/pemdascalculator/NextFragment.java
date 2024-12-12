@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -90,7 +91,7 @@ public class NextFragment extends Fragment {
         try {
             steps.append("Step-by-step solution:\n");
             BigDecimal result = evaluate(expression.replaceAll("(\\d)(\\()", "$1*("), steps);
-            steps.append("\nFinal Result: ").append(result.stripTrailingZeros().toPlainString());
+            steps.append("\nFinal Result: ").append(result.setScale(4, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
         } catch (Exception e) {
             steps.append("Error: Invalid equation");
         }
@@ -157,7 +158,7 @@ public class NextFragment extends Fragment {
                 .append(a.stripTrailingZeros().toPlainString())
                 .append(" ").append(operator).append(" ")
                 .append(b.stripTrailingZeros().toPlainString())
-                .append(" = ").append(result.stripTrailingZeros().toPlainString()).append("\n");
+                .append(" = ").append(result.setScale(4, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString()).append("\n");
         return stepNumber + 1;
     }
 
@@ -167,7 +168,7 @@ public class NextFragment extends Fragment {
             case '-' -> a.subtract(b);
             case '*' -> a.multiply(b);
             case '/' -> a.divide(b, 10, RoundingMode.HALF_UP);
-            case '^' -> BigDecimal.valueOf(Math.pow(a.doubleValue(), b.doubleValue()));
+            case '^' -> a.pow(b.intValue(), new MathContext(10, RoundingMode.HALF_UP));
             default -> throw new IllegalArgumentException("Invalid operator");
         };
     }
