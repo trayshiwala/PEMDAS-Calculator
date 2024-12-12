@@ -12,6 +12,7 @@
     <string name="leftParenBtn">(</string>
     <string name="rightParenBtn">)</string>
     <string name="exponentBtn">xⁿ</string>
+    <string name="deleteBtn">DEL</string>
 
 
     <string name="oneBtn">1</string>
@@ -24,4 +25,8 @@
     <string name="eightBtn">8</string>
     <string name="nineBtn">9</string>
     <string name="zeroBtn">0</string>
+
+    <string name="anotherProblemLabel">Let\'s Solve Another Problem!</string>
+    <string name="solutionTitle">Step-By-Step Solution</string>
+    <string name="inputHint">Enter Expression</string>
 </resources>
