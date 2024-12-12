@@ -103,7 +103,7 @@ public class NextFragment extends Fragment {
         return switch (operator) {
             case '+' -> a + b;
             case '-' -> a - b;
-            case '*' -> a * b;
+            case 'x' -> a * b;
             case '/' -> a / b;
             case '^' -> Math.pow(a, b);
             default -> throw new IllegalArgumentException("Invalid operator");
@@ -111,13 +111,13 @@ public class NextFragment extends Fragment {
     }
 
     private boolean isOperator(char c) {
-        return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
+        return c == '+' || c == '-' || c == 'x' || c == '/' || c == '^';
     }
 
     private int precedence(char operator) {
         return switch (operator) {
             case '+', '-' -> 1;
-            case '*', '/' -> 2;
+            case 'x', '/' -> 2;
             case '^' -> 3;
             default -> -1;
         };
