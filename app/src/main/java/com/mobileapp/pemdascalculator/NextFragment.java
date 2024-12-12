@@ -26,7 +26,7 @@ public class NextFragment extends Fragment {
         if (args != null) {
             String equation = args.getString("equation");
             String steps = evaluateWithSteps(equation);
-            solutionText.setText("Your equation: " + equation + "\n" + steps);
+            solutionText.setText("Your equation: \n\n" + equation + "\n\n\n" + steps);
         }
     }
 
@@ -35,7 +35,7 @@ public class NextFragment extends Fragment {
         try {
             steps.append("Step-by-step solution:\n");
             double result = evaluate(expression.replace("X", "*"), steps);
-            steps.append("Final Result: ").append(result % 1 == 0 ? (int) result : result);
+            steps.append("\nFinal Result: ").append(result % 1 == 0 ? (int) result : result);
         } catch (Exception e) {
             steps.append("Error: Invalid equation");
         }
@@ -92,7 +92,7 @@ public class NextFragment extends Fragment {
         char operator = operators.pop();
         double result = applyOperation(a, b, operator);
         values.push(result);
-        steps.append("Step ").append(steps.length() + 1).append(": ")
+        steps.append("\nStep ").append(steps.length() + 1).append(": ")
                 .append((a % 1 == 0 ? (int) a : a))
                 .append(" ").append(operator).append(" ")
                 .append((b % 1 == 0 ? (int) b : b))
