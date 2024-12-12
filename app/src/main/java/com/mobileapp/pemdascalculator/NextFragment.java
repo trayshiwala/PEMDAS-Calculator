@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -28,8 +30,6 @@ public class NextFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
         TextView solutionText = view.findViewById(R.id.solutionText);
         Spinner historySpinner = view.findViewById(R.id.historySpinner);
         Button solveAnother = view.findViewById(R.id.btn_solve_another);
@@ -45,30 +45,34 @@ public class NextFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             String equation = args.getString("equation");
-            String steps = evaluateWithSteps(equation);
-            solutionText.setText("Your equation: \n\n" + equation + "\n\n\n" + steps);
+            if (equation != null && !equation.isEmpty()) {
+                String processedEquation = equation.replace("÷", "/").replace("x", "*").replace("xⁿ", "^");
+                String steps = evaluateWithSteps(processedEquation);
+                solutionText.setText("Your equation: \n\n" + equation + "\n\n\n" + steps);
 
-            if (!equationHistory.contains(equation)) {
-                equationHistory.add(equation);
-                spinnerItems.add(equation);
-                historyAdapter.notifyDataSetChanged();
+                if (!equationHistory.contains(equation)) {
+                    equationHistory.add(equation);
+                    spinnerItems.add(equation);
+                    historyAdapter.notifyDataSetChanged();
+                }
+                historySpinner.setSelection(0);
+            } else {
+                solutionText.setText("Error: No equation provided.");
             }
-            historySpinner.setSelection(0); // Ensure "Your math history" remains as the prompt
         }
 
         historySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position > 0) { // Skip "Your math history" item
+                if (position > 0) {
                     String selectedEquation = equationHistory.get(position - 1);
-                    String steps = evaluateWithSteps(selectedEquation);
+                    String steps = evaluateWithSteps(selectedEquation.replace("÷", "/").replace("x", "*").replace("xⁿ", "^"));
                     solutionText.setText("Your equation: \n\n" + selectedEquation + "\n\n\n" + steps);
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         solveAnother.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_nextFragment_to_welcomeFragment));
@@ -85,16 +89,16 @@ public class NextFragment extends Fragment {
         StringBuilder steps = new StringBuilder();
         try {
             steps.append("Step-by-step solution:\n");
-            double result = evaluate(expression.replace("X", "*").replaceAll("(\\d)(\\()", "$1*("), steps);
-            steps.append("\nFinal Result: ").append(formatNumber(result));
+            BigDecimal result = evaluate(expression.replaceAll("(\\d)(\\()", "$1*("), steps);
+            steps.append("\nFinal Result: ").append(result.stripTrailingZeros().toPlainString());
         } catch (Exception e) {
             steps.append("Error: Invalid equation");
         }
         return steps.toString();
     }
 
-    private double evaluate(String expression, StringBuilder steps) {
-        Stack<Double> values = new Stack<>();
+    private BigDecimal evaluate(String expression, StringBuilder steps) {
+        Stack<BigDecimal> values = new Stack<>();
         Stack<Character> operators = new Stack<>();
         StringBuilder currentNumber = new StringBuilder();
         int stepNumber = 1;
@@ -106,14 +110,14 @@ public class NextFragment extends Fragment {
                 currentNumber.append(c);
             } else if (c == '(') {
                 if (currentNumber.length() > 0) {
-                    values.push(Double.parseDouble(currentNumber.toString()));
+                    values.push(new BigDecimal(currentNumber.toString()));
                     currentNumber.setLength(0);
                     operators.push('*');
                 }
                 operators.push(c);
             } else if (c == ')') {
                 if (currentNumber.length() > 0) {
-                    values.push(Double.parseDouble(currentNumber.toString()));
+                    values.push(new BigDecimal(currentNumber.toString()));
                     currentNumber.setLength(0);
                 }
                 while (!operators.isEmpty() && operators.peek() != '(') {
@@ -122,7 +126,7 @@ public class NextFragment extends Fragment {
                 operators.pop();
             } else if (isOperator(c)) {
                 if (currentNumber.length() > 0) {
-                    values.push(Double.parseDouble(currentNumber.toString()));
+                    values.push(new BigDecimal(currentNumber.toString()));
                     currentNumber.setLength(0);
                 }
                 while (!operators.isEmpty() && precedence(c) <= precedence(operators.peek())) {
@@ -133,7 +137,7 @@ public class NextFragment extends Fragment {
         }
 
         if (currentNumber.length() > 0) {
-            values.push(Double.parseDouble(currentNumber.toString()));
+            values.push(new BigDecimal(currentNumber.toString()));
         }
 
         while (!operators.isEmpty()) {
@@ -143,27 +147,27 @@ public class NextFragment extends Fragment {
         return values.pop();
     }
 
-    private int calculateTopOperation(Stack<Double> values, Stack<Character> operators, StringBuilder steps, int stepNumber) {
-        double b = values.pop();
-        double a = values.pop();
+    private int calculateTopOperation(Stack<BigDecimal> values, Stack<Character> operators, StringBuilder steps, int stepNumber) {
+        BigDecimal b = values.pop();
+        BigDecimal a = values.pop();
         char operator = operators.pop();
-        double result = applyOperation(a, b, operator);
+        BigDecimal result = applyOperation(a, b, operator);
         values.push(result);
         steps.append("\nStep ").append(stepNumber).append(": ")
-                .append(formatNumber(a))
+                .append(a.stripTrailingZeros().toPlainString())
                 .append(" ").append(operator).append(" ")
-                .append(formatNumber(b))
-                .append(" = ").append(formatNumber(result)).append("\n");
+                .append(b.stripTrailingZeros().toPlainString())
+                .append(" = ").append(result.stripTrailingZeros().toPlainString()).append("\n");
         return stepNumber + 1;
     }
 
-    private double applyOperation(double a, double b, char operator) {
+    private BigDecimal applyOperation(BigDecimal a, BigDecimal b, char operator) {
         return switch (operator) {
-            case '+' -> a + b;
-            case '-' -> a - b;
-            case '*' -> a * b;
-            case '/' -> a / b;
-            case '^' -> Math.pow(a, b);
+            case '+' -> a.add(b);
+            case '-' -> a.subtract(b);
+            case '*' -> a.multiply(b);
+            case '/' -> a.divide(b, 10, RoundingMode.HALF_UP);
+            case '^' -> BigDecimal.valueOf(Math.pow(a.doubleValue(), b.doubleValue()));
             default -> throw new IllegalArgumentException("Invalid operator");
         };
     }
@@ -179,9 +183,5 @@ public class NextFragment extends Fragment {
             case '^' -> 3;
             default -> -1;
         };
-    }
-
-    private String formatNumber(double number) {
-        return (number % 1 == 0) ? String.valueOf((int) number) : String.valueOf(number);
     }
 }

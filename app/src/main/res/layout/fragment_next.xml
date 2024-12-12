@@ -18,7 +18,7 @@
             android:id="@+id/historySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="32dp"
+            android:padding="28dp"
             android:prompt="@string/your_math_history" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:id="@+id/solutionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:fontFamily="serif-monospace"
             android:gravity="center_horizontal"
             android:padding="64dp"
@@ -45,19 +45,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-
             android:text="@string/anotherProblemLabel"
-            android:backgroundTint="@color/maroon"/>
-
-            android:padding="16dp"
-            android:text="Let's Solve Another Problem!" />
+            android:backgroundTint="@color/maroon"
+            android:padding="20dp" />
 
         <Button
             android:id="@+id/btn_clear_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="16dp"
+            android:padding="12dp"
             android:text="Clear History" />
 
     </LinearLayout>
