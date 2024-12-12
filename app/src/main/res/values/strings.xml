@@ -29,4 +29,8 @@
     <string name="anotherProblemLabel">Let\'s Solve Another Problem!</string>
     <string name="solutionTitle">Step-By-Step Solution</string>
     <string name="inputHint">Enter Expression</string>
+
+    <string name="select_equation_prompt">Select a previous equation</string>
+    <string name="your_math_history">Your math history</string>
+
 </resources>

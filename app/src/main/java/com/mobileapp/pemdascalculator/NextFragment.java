@@ -4,15 +4,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class NextFragment extends Fragment {
+    private static final ArrayList<String> equationHistory = new ArrayList<>();
+    private ArrayAdapter<String> historyAdapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -24,16 +31,53 @@ public class NextFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView solutionText = view.findViewById(R.id.solutionText);
+        Spinner historySpinner = view.findViewById(R.id.historySpinner);
+        Button solveAnother = view.findViewById(R.id.btn_solve_another);
+        Button clearHistory = view.findViewById(R.id.btn_clear_history);
+
+        ArrayList<String> spinnerItems = new ArrayList<>();
+        spinnerItems.add("Your math history");
+        spinnerItems.addAll(equationHistory);
+
+        historyAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, spinnerItems);
+        historySpinner.setAdapter(historyAdapter);
+
         Bundle args = getArguments();
         if (args != null) {
             String equation = args.getString("equation");
             String steps = evaluateWithSteps(equation);
             solutionText.setText("Your equation: \n\n" + equation + "\n\n\n" + steps);
+
+            if (!equationHistory.contains(equation)) {
+                equationHistory.add(equation);
+                spinnerItems.add(equation);
+                historyAdapter.notifyDataSetChanged();
+            }
+            historySpinner.setSelection(0); // Ensure "Your math history" remains as the prompt
         }
 
-        Button solveAnother = view.findViewById(R.id.btn_solve_another);
-        solveAnother.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_nextFragment_to_welcomeFragment);
+        historySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) { // Skip "Your math history" item
+                    String selectedEquation = equationHistory.get(position - 1);
+                    String steps = evaluateWithSteps(selectedEquation);
+                    solutionText.setText("Your equation: \n\n" + selectedEquation + "\n\n\n" + steps);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        solveAnother.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_nextFragment_to_welcomeFragment));
+
+        clearHistory.setOnClickListener(v -> {
+            equationHistory.clear();
+            spinnerItems.clear();
+            spinnerItems.add("Your math history");
+            historyAdapter.notifyDataSetChanged();
         });
     }
 
