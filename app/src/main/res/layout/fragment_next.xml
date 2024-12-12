@@ -1,39 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:gravity="center">
 
-    <TextView
-        android:id="@+id/originalExpression"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="Original Expression"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_gravity="top|center"
-        android:paddingTop="20dp"
-        android:paddingBottom="5dp"/>
-    <TextView
-        android:id="@+id/stepsDisplay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Steps"
-        android:gravity="center"/>
-    <TextView
-        android:id="@+id/resultDisplay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Answer"
-        android:gravity="center"/>
+        android:orientation="vertical"
+        android:padding="64dp"
+        android:gravity="center">
 
-
-    <Button
-        android:id="@+id/returnBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:text="@string/returnBtn"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/solutionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingTop="64dp"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
+</ScrollView>

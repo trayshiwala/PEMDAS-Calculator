@@ -1,31 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PEMDAS Calculator</string>
-    <string name="welcomeMessage">Welcome to the PEMDAS Calculator!</string>
-    <string name="showStepsLabel">Show Steps</string>
-
-    <string name="clearBtn">C</string>
-    <string name="equalsBtn">=</string>
-    <string name="addBtn">+</string>
-    <string name="minusBtn">-</string>
-    <string name="multiplyBtn">×</string>
-    <string name="divideBtn">÷</string>
-    <string name="decimalBtn">.</string>
-    <string name="leftParenBtn">(</string>
-    <string name="rightParenBtn">)</string>
-    <string name="exponentBtn">xⁿ</string>
-
-
-    <string name="oneBtn">1</string>
-    <string name="twoBtn">2</string>
-    <string name="threeBtn">3</string>
-    <string name="fourBtn">4</string>
-    <string name="fiveBtn">5</string>
-    <string name="sixBtn">6</string>
-    <string name="sevenBtn">7</string>
-    <string name="eightBtn">8</string>
-    <string name="nineBtn">9</string>
-    <string name="zeroBtn">0</string>
-
-    <string name="startBtn">Start</string>
-    <string name="returnBtn">Return to Calculator</string>
+    <string name="app_name">PEM-Dazzle</string>
 </resources>
