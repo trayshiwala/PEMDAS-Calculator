@@ -1,36 +1,30 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="@color/navy">
+    android:gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="32dp"
+        android:padding="64dp"
         android:gravity="center">
-
-        <TextView
-            android:id="@+id/solutionTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Step-By-Step Solution"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textSize="36sp"
-            android:paddingBottom="16dp"
-            android:textColor="@color/lightGrey"/>
 
         <TextView
             android:id="@+id/solutionText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="36sp"
-            android:textColor="@color/black"
-            android:paddingTop="64dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
             android:gravity="center_horizontal"
-            android:background="@color/salmon" />
+            android:padding="64dp" />
 
+        <Button
+            android:id="@+id/btn_solve_another"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="64dp"
+            android:text="Let's Solve Another Problem!" />
     </LinearLayout>
 </ScrollView>

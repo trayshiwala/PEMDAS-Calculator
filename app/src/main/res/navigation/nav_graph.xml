@@ -15,7 +15,7 @@
     <fragment
         android:id="@+id/nextFragment"
         android:name="com.mobileapp.pemdascalculator.NextFragment"
-        android:label="Next" >
+        android:label="Next">
         <action
             android:id="@+id/action_nextFragment_to_welcomeFragment"
             app:destination="@id/welcomeFragment" />

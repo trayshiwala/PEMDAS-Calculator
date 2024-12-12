@@ -26,8 +26,7 @@ public class WelcomeFragment extends Fragment {
                 R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4,
                 R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8, R.id.btn_9,
                 R.id.btn_plus, R.id.btn_minus, R.id.btn_multiply, R.id.btn_divide,
-                R.id.btn_open_parenthesis, R.id.btn_close_parenthesis, R.id.btn_exponent,
-                R.id.btn_dot
+                R.id.btn_open_parenthesis, R.id.btn_close_parenthesis, R.id.btn_exponent, R.id.btn_decimal
         };
 
         for (int id : buttonIds) {

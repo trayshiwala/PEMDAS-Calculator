@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import java.util.Stack;
 
 public class NextFragment extends Fragment {
@@ -28,14 +30,19 @@ public class NextFragment extends Fragment {
             String steps = evaluateWithSteps(equation);
             solutionText.setText("Your equation: \n\n" + equation + "\n\n\n" + steps);
         }
+
+        Button solveAnother = view.findViewById(R.id.btn_solve_another);
+        solveAnother.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_nextFragment_to_welcomeFragment);
+        });
     }
 
     private String evaluateWithSteps(String expression) {
         StringBuilder steps = new StringBuilder();
         try {
             steps.append("Step-by-step solution:\n");
-            double result = evaluate(expression.replace("X", "*"), steps);
-            steps.append("\nFinal Result: ").append(result % 1 == 0 ? (int) result : result);
+            double result = evaluate(expression.replace("X", "*").replaceAll("(\\d)(\\()", "$1*("), steps);
+            steps.append("\nFinal Result: ").append(formatNumber(result));
         } catch (Exception e) {
             steps.append("Error: Invalid equation");
         }
@@ -46,6 +53,7 @@ public class NextFragment extends Fragment {
         Stack<Double> values = new Stack<>();
         Stack<Character> operators = new Stack<>();
         StringBuilder currentNumber = new StringBuilder();
+        int stepNumber = 1;
 
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
@@ -53,6 +61,11 @@ public class NextFragment extends Fragment {
             if (Character.isDigit(c) || c == '.') {
                 currentNumber.append(c);
             } else if (c == '(') {
+                if (currentNumber.length() > 0) {
+                    values.push(Double.parseDouble(currentNumber.toString()));
+                    currentNumber.setLength(0);
+                    operators.push('*');
+                }
                 operators.push(c);
             } else if (c == ')') {
                 if (currentNumber.length() > 0) {
@@ -60,7 +73,7 @@ public class NextFragment extends Fragment {
                     currentNumber.setLength(0);
                 }
                 while (!operators.isEmpty() && operators.peek() != '(') {
-                    calculateTopOperation(values, operators, steps);
+                    stepNumber = calculateTopOperation(values, operators, steps, stepNumber);
                 }
                 operators.pop();
             } else if (isOperator(c)) {
@@ -69,7 +82,7 @@ public class NextFragment extends Fragment {
                     currentNumber.setLength(0);
                 }
                 while (!operators.isEmpty() && precedence(c) <= precedence(operators.peek())) {
-                    calculateTopOperation(values, operators, steps);
+                    stepNumber = calculateTopOperation(values, operators, steps, stepNumber);
                 }
                 operators.push(c);
             }
@@ -80,30 +93,31 @@ public class NextFragment extends Fragment {
         }
 
         while (!operators.isEmpty()) {
-            calculateTopOperation(values, operators, steps);
+            stepNumber = calculateTopOperation(values, operators, steps, stepNumber);
         }
 
         return values.pop();
     }
 
-    private void calculateTopOperation(Stack<Double> values, Stack<Character> operators, StringBuilder steps) {
+    private int calculateTopOperation(Stack<Double> values, Stack<Character> operators, StringBuilder steps, int stepNumber) {
         double b = values.pop();
         double a = values.pop();
         char operator = operators.pop();
         double result = applyOperation(a, b, operator);
         values.push(result);
-        steps.append("\nStep ").append(steps.length() + 1).append(": ")
-                .append((a % 1 == 0 ? (int) a : a))
+        steps.append("\nStep ").append(stepNumber).append(": ")
+                .append(formatNumber(a))
                 .append(" ").append(operator).append(" ")
-                .append((b % 1 == 0 ? (int) b : b))
-                .append(" = ").append(result % 1 == 0 ? (int) result : result).append("\n");
+                .append(formatNumber(b))
+                .append(" = ").append(formatNumber(result)).append("\n");
+        return stepNumber + 1;
     }
 
     private double applyOperation(double a, double b, char operator) {
         return switch (operator) {
             case '+' -> a + b;
             case '-' -> a - b;
-            case 'x' -> a * b;
+            case '*' -> a * b;
             case '/' -> a / b;
             case '^' -> Math.pow(a, b);
             default -> throw new IllegalArgumentException("Invalid operator");
@@ -111,15 +125,19 @@ public class NextFragment extends Fragment {
     }
 
     private boolean isOperator(char c) {
-        return c == '+' || c == '-' || c == 'x' || c == '/' || c == '^';
+        return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
     }
 
     private int precedence(char operator) {
         return switch (operator) {
             case '+', '-' -> 1;
-            case 'x', '/' -> 2;
+            case '*', '/' -> 2;
             case '^' -> 3;
             default -> -1;
         };
+    }
+
+    private String formatNumber(double number) {
+        return (number % 1 == 0) ? String.valueOf((int) number) : String.valueOf(number);
     }
 }
