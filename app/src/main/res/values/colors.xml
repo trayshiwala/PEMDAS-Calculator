@@ -3,4 +3,12 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="lightGrey">#B0B0B0</color>
+
+    <!-- Color Palette -->
+    <color name="navy">#37415F</color>
+    <color name="maroon">#914363</color>
+    <color name="purpleAccent">#896B93</color>
+    <color name="salmon">#9D5F68</color>
+    <color name="black">#000000</color>
 </resources>
