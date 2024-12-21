@@ -1,3 +1,4 @@
+// All code contained in this project was completed by 12/12/2024, as per the project deadlines.
 package com.mobileapp.pemdascalculator;
 
 import android.os.Bundle;
